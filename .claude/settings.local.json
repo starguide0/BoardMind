@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx next build)",
+      "Bash(source:*)",
+      "Bash(python:*)",
+      "Bash(pip install:*)",
+      "Bash(ollama list:*)",
+      "Bash(system_profiler:*)",
+      "Bash(kill:*)",
+      "Bash(npm run dev:*)",
+      "Bash(lsof:*)",
+      "Bash(xargs kill:*)",
+      "Bash(curl:*)",
+      "Bash(python3:*)",
+      "Bash(ollama pull:*)",
+      "Bash(open:*)",
+      "WebSearch",
+      "Bash(node -e:*)",
+      "Bash(npx tsc:*)"
+    ]
+  }
+}
