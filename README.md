@@ -13,19 +13,30 @@
 
 ## 아키텍처
 
-```
-┌─────────────────────────────┐     WebSocket      ┌─────────────────────────────┐
-│         Client (Next.js)    │◄──── /ws/game ────►│      Server (FastAPI)       │
-│                             │                     │                             │
-│  Camera → Motion Detection  │  frame.capture ──► │  Vision Service             │
-│  (Canvas pixel diff)        │                     │  (base64 decode + LLM)      │
-│                             │ ◄── game.identified │                             │
-│  Session Panel              │  role.select ────► │  Game Manager               │
-│  Role Selection             │ ◄── role.confirmed │  (LLM-based, no rules)      │
-│                             │                     │                             │
-│  Chat + Voice Input (STT)   │  chat/voice ─────► │  LLM Service                │
-│  TTS Output                 │ ◄── ai.speak       │  (Ollama AsyncClient)       │
-└─────────────────────────────┘                     └─────────────────────────────┘
+```mermaid
+flowchart LR
+    subgraph Client["🖥️ Client (Next.js)"]
+        Camera["📷 Camera"]
+        Motion["🔍 Motion Detection<br/>(Canvas pixel diff)"]
+        Session["📋 Session Panel"]
+        Role["🎭 Role Selection"]
+        Chat["💬 Chat + Voice"]
+        TTS["🔊 TTS Output"]
+        Camera --> Motion
+    end
+
+    subgraph Server["⚙️ Server (FastAPI)"]
+        Vision["👁️ Vision Service<br/>(base64 + LLM)"]
+        GameMgr["🎮 Game Manager<br/>(LLM-based)"]
+        LLM["🤖 LLM Service<br/>(Ollama)"]
+    end
+
+    Motion -->|"frame.capture"| Vision
+    Vision -->|"game.identified"| Session
+    Session -->|"role.select"| GameMgr
+    GameMgr -->|"role.confirmed"| Role
+    Chat -->|"chat/voice"| LLM
+    LLM -->|"ai.speak"| TTS
 ```
 
 ## 필수 요구사항
